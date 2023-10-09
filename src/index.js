@@ -1,41 +1,44 @@
-//lets create the different variables to add to our to do list
 document.addEventListener("DOMContentLoaded", function () {
-let newInput = document.createElement("duration");
+  const myForm = document.getElementById('myForm');
+  const taskInput = document.getElementById('task');
+  const taskList = document.getElementById('taskList');
 
-const myForm = document.getElementById('my-form');
-const taskInput = document.getElementById('task');
-const dateInput = document.getElementById('due date');
-const taskList = document.getElementById('task-List');
+  // Initialize the tasks array
+  const tasks = [];
 
+  // Add a submit event listener to the form
+  myForm.addEventListener('submit', function (event) {
+      event.preventDefault(); // Prevent the form from submitting
 
-//initiate the form element
-const form = document.getElementById('myForm');
-// to prevent form from submitting
-form.addEventListener('submit', function(event){
-  event.preventDefault();   //stops it from navigating into a new web page and stop sending request to the server
+      const taskText = taskInput.value.trim(); // Get the task text
+
+      if (taskText !== "") {
+          // Create a new list item and add it to the task list
+          const listItem = document.createElement("li");
+          listItem.innerHTML = `
+              <span>${taskText}</span>
+              <button class="delete">Delete</button>
+          `;
+          taskList.appendChild(listItem);
+
+          // Add the task to the tasks array
+          tasks.push(taskText);
+
+          // Clear the input field
+          taskInput.value = "";
+
+          // Add a click event listener to the delete button
+          const deleteButton = listItem.querySelector(".delete");
+          deleteButton.addEventListener('click', function () {
+              // Remove the list item
+              taskList.removeChild(listItem);
+
+              // Remove the task from the tasks array
+              const index = tasks.indexOf(taskText);
+              if (index !== -1) {
+                  tasks.splice(index, 1);
+              }
+          });
+      }
+  });
 });
-
-//lets check to ensure the user entered text before taking the next step
-if (taskText !== "") {
-  //creating a new HTML list <li>
-  const listItem = document.createElement("li");//set the list,display text and show button for delete
-listItem.innerHTML = `
-    <span>${taskText}</span>
-    <button class="delete">Delete</button>
-`;
- // HTML unorderd list<ul> and also adds the ordered <li> to it
- taskList.appendChild(listItem);
- taskInput.value = "";//clear the input field for the next user
-
-
-//storing the arrays
-const tasks = [];
-
-//adding event listener to delete button
-const deleteButton = listItem.querySelector(".delete");//navigating into delete button
-deleteButton.addEventListener('click', function() {
-  taskList.removeChild(listItem);// removing list<li>
-});
-}
-});
-
